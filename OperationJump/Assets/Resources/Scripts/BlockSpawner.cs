@@ -9,18 +9,20 @@ public class BlockSpawner : MonoBehaviour
 	private float avgBlockLength = 4;
 	private float minBlockLength = 1.5f;
 
-	private float nextYSpawn = -2.6f;
+	private float nextYSpawn;
+	private float floorY = -8f;
 	private float spawnDistance = 2.4f;
 
 	private CameraController game;
 
 	void Start() {
 		game = GetComponent<CameraController>();
+		nextYSpawn = floorY + spawnDistance;
 	}
 
 	void Update() {
         if (game.isGame) {
-			if (transform.position.y + 6 > nextYSpawn) {
+			if (transform.position.y - floorY > nextYSpawn) {
 				// Spawn a new block
 				Vector3 newBlockPosition = new Vector3 (Random.Range(-3.75f + ((avgBlockLength + 0.5f) / 2), 3.75f - ((avgBlockLength + 0.5f) / 2)), nextYSpawn, 0);
 				GameObject newBlock = Instantiate(Block, newBlockPosition, Quaternion.identity);

@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviour {
 
 	public TMPro.TextMeshProUGUI scoreText;
 	private int score = 0;
+	private int scoreOffset = 9;
+	private float spawnOffset = 2.5f;
 
 	public GameObject PlayerPrefab;
 	private PlayerController player;
@@ -53,8 +55,8 @@ public class CameraController : MonoBehaviour {
 				Vector3 newPosition = new Vector3(0, playerY, 0);
 				transform.position = newPosition + positionalOffset;
 
-				if ((int)((playerY + 5) / 2.4) > score) {
-					score = (int)((playerY + 5) / 2.4);
+				if ((int)((playerY + scoreOffset) / 2.4) > score) {
+					score = (int)((playerY + scoreOffset) / 2.4);
 				}
 				scoreText.text = "Score: " + score;
 			}
@@ -63,7 +65,7 @@ public class CameraController : MonoBehaviour {
 
 	void InstantiateGame() {
 		player = Instantiate(PlayerPrefab).GetComponent<PlayerController>();
-		positionalOffset = transform.position - player.transform.position;
+		positionalOffset = transform.position - player.transform.position - new Vector3(0, spawnOffset, 0);
 
 		isGame = true;
 		gameCanvas.enabled = true;
