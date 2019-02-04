@@ -50,15 +50,19 @@ public class CameraController : MonoBehaviour {
 	void LateUpdate() {
 		if (isGame) {
 			float playerY = player.gameObject.transform.position.y;
-			if (playerY > transform.position.y)
-			{
-				Vector3 newPosition = new Vector3(0, playerY, 0);
+			Vector3 newPosition;
+
+			if (playerY > transform.position.y) {
+				newPosition = new Vector3(0, playerY, 0);
 				transform.position = newPosition + positionalOffset;
 
 				if ((int)((playerY + scoreOffset) / 2.4) > score) {
 					score = (int)((playerY + scoreOffset) / 2.4);
 				}
 				scoreText.text = "Score: " + score;
+			} else {
+				newPosition = transform.position + Vector3.up * 0.002f;
+				transform.position = newPosition;
 			}
 		}
     }
