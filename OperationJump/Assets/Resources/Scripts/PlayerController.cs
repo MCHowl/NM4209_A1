@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-	public bool isJumping { get; set; }
 	public Transform GroundCheck_Positive, GroundCheck_Negative;
 
 	private Rigidbody2D rb2d;
@@ -12,6 +11,7 @@ public class PlayerController : MonoBehaviour {
 	private float groundCheck_Radius = 0.01f;
 
 	private Vector2 jumpForce = new Vector2(500, 500);
+	private Vector2 jumpForce_Half = new Vector2(500, 350);
 	private float speed = 2f;
 	private int direction = 1;
 
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Start() {
 		rb2d = GetComponent<Rigidbody2D>();
-		isJumping = true;
+
 		lastPosition = Vector3.zero;
 		penultimatePosition = Vector3.up;
 	}
@@ -28,7 +28,11 @@ public class PlayerController : MonoBehaviour {
 		if (isGrounded()) {
 			if (Input.GetKeyDown(KeyCode.Space)) {
 				Flip();
-				Jump();
+				if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+					Jump(jumpForce_Half);
+				} else {
+					Jump(jumpForce);
+				}
 			}
 		}
 	}
@@ -37,12 +41,9 @@ public class PlayerController : MonoBehaviour {
 		Move();
 
 		// Code to prevent sticking to walls
-		if (transform.position == lastPosition && lastPosition == penultimatePosition)
-		{
+		if (transform.position == lastPosition && lastPosition == penultimatePosition) {
 			Flip();
-		}
-		else
-		{
+		} else {
 			penultimatePosition = lastPosition;
 			lastPosition = transform.position;
 		}
@@ -70,9 +71,8 @@ public class PlayerController : MonoBehaviour {
 		direction *= -1;
 	}
 
-	void Jump() {
-		isJumping = true;
-		rb2d.AddForce(jumpForce);
+	void Jump(Vector2 force) {
+		rb2d.AddForce(force);
 	}
 
 	bool isGrounded() {
